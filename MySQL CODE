@@ -1,138 +1,124 @@
--- Create the BRANCH Table
-CREATE TABLE BRANCH (
-    BranchNo INT PRIMARY KEY,
+-- Create Branch Table
+CREATE TABLE Branch (
+    BranchID INT AUTO_INCREMENT PRIMARY KEY,
+    BranchAddress VARCHAR(255),
     ManagerID INT,
-    BranchAddress VARCHAR(25)
+    FOREIGN KEY (ManagerID) REFERENCES Employee(EmployeeID)
 );
 
--- Create the EMPLOYEES Table
-CREATE TABLE EMPLOYEES (
-    EmpID INT PRIMARY KEY,
-    Salary INT,
-    Designation VARCHAR(25),
-    EmpName VARCHAR(25),
-    BranchNo INT,
-    FOREIGN KEY (BranchNo) REFERENCES BRANCH(BranchNo)
+-- Create Employee Table
+CREATE TABLE Employee (
+    EmployeeID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Salary DECIMAL(10, 2),
+    Designation VARCHAR(255),
+    BranchID INT,
+    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
 );
 
--- Create the CUSTOMER Table
-CREATE TABLE CUSTOMER (
-    CustomerID INT PRIMARY KEY,
+-- Create Customer Table
+CREATE TABLE Customer (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255),
+    Address VARCHAR(255),
     BooksIssued INT,
-    CustomerName VARCHAR(25),
-    CustomerAddress VARCHAR(25),
-    BranchNo INT,
-    FOREIGN KEY (BranchNo) REFERENCES BRANCH(BranchNo)
+    BranchID INT,
+    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
 );
 
--- Create the BOOKS Table
-CREATE TABLE BOOKS (
-    ISBN INT PRIMARY KEY,
-    Genre VARCHAR(25),
-    Title VARCHAR(25),
-    Publisher VARCHAR(25),
-    Price INT,
-    Author VARCHAR(25),
-    Status VARCHAR(25),
-    BranchNo INT,
-    FOREIGN KEY (BranchNo) REFERENCES BRANCH(BranchNo)
+-- Create Book Table
+CREATE TABLE Book (
+    BookISBN INT PRIMARY KEY,
+    Title VARCHAR(255),
+    Author VARCHAR(255),
+    Genre VARCHAR(255),
+    Publisher VARCHAR(255),
+    Price DECIMAL(10, 2),
+    Status ENUM('Available', 'Checked Out'),
+    BranchID INT,
+    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
 );
 
--- Create the ISSUECARD Table
-CREATE TABLE ISSUECARD (
-    IssueID INT PRIMARY KEY,
+-- Create IssueRecord Table
+CREATE TABLE IssueRecord (
+    IssueID INT AUTO_INCREMENT PRIMARY KEY,
     IssueDate DATE,
-    ISBN INT,
-    IssueBookName VARCHAR(25),
+    BookISBN INT,
     CustomerID INT,
-    FOREIGN KEY (ISBN) REFERENCES BOOKS(ISBN),
-    FOREIGN KEY (CustomerID) REFERENCES CUSTOMER(CustomerID)
+    FOREIGN KEY (BookISBN) REFERENCES Book(BookISBN),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
--- Create the RETURNCARD Table
-CREATE TABLE RETURNCARD (
-    ReturnID INT PRIMARY KEY,
+-- Create ReturnRecord Table
+CREATE TABLE ReturnRecord (
+    ReturnID INT AUTO_INCREMENT PRIMARY KEY,
     ReturnDate DATE,
-    ISBN INT,
-    ReturnBookName VARCHAR(25),
+    BookISBN INT,
     CustomerID INT,
-    FOREIGN KEY (ISBN) REFERENCES BOOKS(ISBN),
-    FOREIGN KEY (CustomerID) REFERENCES CUSTOMER(CustomerID)
+    FOREIGN KEY (BookISBN) REFERENCES Book(BookISBN),
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
--- Inserting Values into BRANCH Table
-INSERT INTO BRANCH VALUES (301, 900, 'ABC ROAD DELHI');
-INSERT INTO BRANCH VALUES (302, 901, 'MG ROAD');
-INSERT INTO BRANCH VALUES (303, 902, 'KALUSARAI');
-INSERT INTO BRANCH VALUES (304, 903, 'PRESS COLONY');
-INSERT INTO BRANCH VALUES (305, 904, 'XYZ LANE');
-INSERT INTO BRANCH VALUES (306, 905, 'SALT LAKE');
+-- Insert Data into Branch Table
+INSERT INTO Branch (BranchAddress, ManagerID) VALUES ('123 Main St, City', 1);
+INSERT INTO Branch (BranchAddress, ManagerID) VALUES ('456 Oak St, Town', 2);
+INSERT INTO Branch (BranchAddress, ManagerID) VALUES ('789 Pine St, City', 3);
+INSERT INTO Branch (BranchAddress, ManagerID) VALUES ('654 Cedar St, Town', 4);
 
--- Inserting Values into EMPLOYEES Table
-INSERT INTO EMPLOYEES VALUES (30101, 56000, 'SR LIBRARIAN', 'ROHAN ANAND', 301);
-INSERT INTO EMPLOYEES VALUES (30102, 40000, 'DATABASE MANAGER', 'RITESH MISHRA', 301);
-INSERT INTO EMPLOYEES VALUES (30103, 300000, 'MANAGER', 'RITESH KHAN', 301);
-INSERT INTO EMPLOYEES VALUES (30201, 66000, 'SR LIBRARIAN', 'NURUL HAQUE', 302);
-INSERT INTO EMPLOYEES VALUES (30202, 26000, 'CLERK', 'ANANDA DEY', 302);
-INSERT INTO EMPLOYEES VALUES (30203, 76000, 'MANAGER', 'SWARUP SARKAR', 302);
-INSERT INTO EMPLOYEES VALUES (30204, 16000, 'GUARDSMAN', 'SUPRATIM MISHRA', 302);
-INSERT INTO EMPLOYEES VALUES (30301, 86000, 'MANAGER', 'SANJAY YADAV', 303);
-INSERT INTO EMPLOYEES VALUES (30302, 36000, 'SR LIBRARIAN', 'TITU BISOI', 303);
-INSERT INTO EMPLOYEES VALUES (30401, 96000, 'MANAGER', 'PRADEEP RAOUTH', 304);
-INSERT INTO EMPLOYEES VALUES (30402, 40000, 'DATABASE MANAGER', 'BITTU MISHRA', 304);
-INSERT INTO EMPLOYEES VALUES (30501, 100000, 'MANAGER', 'ANKIT ANAND', 305);
-INSERT INTO EMPLOYEES VALUES (30601, 200000, 'MANAGER', 'ROHAN BASU', 306);
-INSERT INTO EMPLOYEES VALUES (30502, 56000, 'COMPUTER TECH', 'MOHIBUL ISLAM', 305);
-INSERT INTO EMPLOYEES VALUES (30602, 40000, 'CLERK', 'MONORANJAN MODI', 306);
-INSERT INTO EMPLOYEES VALUES (30603, 45000, 'JR LIBRARIAN', 'RAJIV DEY', 306);
+-- Insert Data into Employee Table
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Alice Smith', 50000, 'Manager', 1);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Bob Johnson', 40000, 'Librarian', 1);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Carol White', 35000, 'Clerk', 1);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('David Brown', 55000, 'Manager', 2);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Eve Davis', 42000, 'Librarian', 2);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Frank Miller', 37000, 'Clerk', 2);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('George King', 60000, 'Librarian', 3);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Hannah Gold', 40000, 'Database Manager', 3);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Isabella Grey', 65000, 'Manager', 4);
+INSERT INTO Employee (Name, Salary, Designation, BranchID) VALUES ('Jack Lee', 42000, 'Assistant Librarian', 4);
 
--- Inserting Values into CUSTOMER Table
-INSERT INTO CUSTOMER VALUES (1230, 5, 'SHASWATA', 'SECONDARY ROAD', 301);
-INSERT INTO CUSTOMER VALUES (1231, 10, 'RISHAV', 'MG ROAD', 302);
-INSERT INTO CUSTOMER VALUES (1232, 11, 'PREETAM', 'KALUSARAI', 303);
-INSERT INTO CUSTOMER VALUES (1233, 7, 'AYUSH', 'BIDHANNAGAR', 301);
-INSERT INTO CUSTOMER VALUES (1234, 8, 'SOUMODEEP', '23 KALUSARAI', 303);
-INSERT INTO CUSTOMER VALUES (1235, 9, 'SOHAM', 'NEHRU ROAD', 302);
-INSERT INTO CUSTOMER VALUES (1236, 2, 'RAJDEEP', 'AKBAR STREET', 304);
-INSERT INTO CUSTOMER VALUES (1237, 1, 'RATAN', 'NEWTON AVENUE', 306);
-INSERT INTO CUSTOMER VALUES (1238, 3, 'ISHAAN', 'SALT LAKE', 306);
-INSERT INTO CUSTOMER VALUES (1239, 20, 'PRATEEK', 'AKBAR ROAD', 304);
-INSERT INTO CUSTOMER VALUES (1240, 12, 'DEVANSH', 'SHIVAJI COLONY', 305);
-INSERT INTO CUSTOMER VALUES (1241, 11, 'PUSHPAL', 'RAMKRISHNA ROAD', 301);
+-- Insert Data into Customer Table
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('John Doe', '123 Elm St, City', 3, 1);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('Jane Roe', '456 Maple St, Town', 2, 2);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('Mary Smith', '789 Oak St, City', 4, 3);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('James Brown', '321 Pine St, Town', 5, 4);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('Patricia Johnson', '654 Birch St, City', 6, 1);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('Michael Brown', '987 Cedar St, Town', 7, 2);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('Linda Green', '111 Willow St, City', 3, 3);
+INSERT INTO Customer (Name, Address, BooksIssued, BranchID) VALUES ('Robert White', '222 Chestnut St, Town', 4, 4);
 
--- Inserting Values into BOOKS Table
-INSERT INTO BOOKS VALUES (101, 'HORROR', 'IT', 'BLOOMSBURRY', 500, 'STEPHEN KING', 'VERY GOOD', 301);
-INSERT INTO BOOKS VALUES (102, 'FANTASY', 'HARRY POTTER', 'BLOOMSBURRY', 1000, 'JK ROWLING', 'GOOD', 302);
-INSERT INTO BOOKS VALUES (103, 'PSYCHOLOGICAL THRILLER', 'MISERY', 'PENGUIN', 1500, 'STEPHEN KING', 'VERY GOOD', 303);
-INSERT INTO BOOKS VALUES (104, 'PSYCHOLOGICAL HORROR', 'THE SHINING', 'PUFFIN', 5000, 'STEPHEN KING', 'EXCELLENT', 304);
-INSERT INTO BOOKS VALUES (105, 'DETECTIVE THRILLER', 'SHERLOCK HOLMES', 'PRAJAPATI', 2500, 'SIR ARTHUR CONAN DOYLE', 'GOOD', 305);
-INSERT INTO BOOKS VALUES (106, 'PHILOSOPHY', 'WAR AND PEACE', 'BLOOMSBURRY', 1200, 'LEO TOLSTOY', 'AVERAGE', 301);
-INSERT INTO BOOKS VALUES (107, 'ROMANCE', 'ROMEO AND JULIET', 'ROYAL', 5600, 'WILLIAM SHAKESPEARE', 'VERY GOOD', 302);
-INSERT INTO BOOKS VALUES (108, 'BIOGRAPHY', 'THE GOOD BOATMAN', 'NATIONAL PRESS', 3500, 'RAJMOHAN GANDHI', 'GOOD', 303);
-INSERT INTO BOOKS VALUES (109, 'THRILLER', 'TINTIN', 'SCOTTISH PRESS', 500, 'HERGE', 'VERY GOOD', 305);
-INSERT INTO BOOKS VALUES (110, 'FANTASY', 'THE LORD OF THE RINGS', 'BLOOMSBURRY', 500, 'JJ TOLKIENS', 'EXCELLENT', 306);
-INSERT INTO BOOKS VALUES (111, 'HORROR', 'SERPENT', 'PENGUIN', 5100, 'RAMACHAND', 'POOR', 304);
+-- Insert Data into Book Table
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (1, 'Book A', 'Author A', 'Fiction', 'Publisher A', 19.99, 'Available', 1);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (2, 'Book B', 'Author B', 'Non-Fiction', 'Publisher B', 25.50, 'Checked Out', 2);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (3, 'Book C', 'Author C', 'Science Fiction', 'Publisher C', 22.99, 'Available', 3);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (4, 'Book D', 'Author D', 'Biography', 'Publisher D', 27.99, 'Available', 4);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (5, 'Book E', 'Author E', 'Fantasy', 'Publisher E', 35.00, 'Checked Out', 1);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (6, 'Book F', 'Author F', 'Mystery', 'Publisher F', 29.50, 'Available', 2);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (7, 'Book G', 'Author G', 'Horror', 'Publisher G', 19.75, 'Checked Out', 3);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (8, 'Book H', 'Author H', 'Romance', 'Publisher H', 25.00, 'Available', 4);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (9, 'Book I', 'Author I', 'Thriller', 'Publisher I', 18.00, 'Checked Out', 1);
+INSERT INTO Book (BookISBN, Title, Author, Genre, Publisher, Price, Status, BranchID) VALUES (10, 'Book J', 'Author J', 'Historical', 'Publisher J', 28.99, 'Available', 2);
 
--- Inserting Values into ISSUECARD Table
-INSERT INTO ISSUECARD VALUES (6601, '2016-12-17', 101, 'IT', 1230);
-INSERT INTO ISSUECARD VALUES (6602, '2017-01-19', 102, 'HARRY POTTER', 1231);
-INSERT INTO ISSUECARD VALUES (6603, '2017-02-22', 103, 'MISERY', 1232);
-INSERT INTO ISSUECARD VALUES (6604, '2017-03-15', 104, 'THE SHINING', 1233);
-INSERT INTO ISSUECARD VALUES (6605, '2017-04-18', 105, 'SHERLOCK HOLMES', 1234);
-INSERT INTO ISSUECARD VALUES (6606, '2017-05-21', 106, 'WAR AND PEACE', 1235);
-INSERT INTO ISSUECARD VALUES (6607, '2017-06-14', 107, 'ROMEO AND JULIET', 1236);
-INSERT INTO ISSUECARD VALUES (6608, '2017-07-27', 108, 'THE GOOD BOATMAN', 1237);
-INSERT INTO ISSUECARD VALUES (6609, '2017-08-30', 109, 'TINTIN', 1238);
-INSERT INTO ISSUECARD VALUES (6610, '2017-09-21', 110, 'THE LORD OF THE RINGS', 1239);
+-- Insert Data into IssueRecord Table
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-05', 1, 1);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-06', 2, 2);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-07', 3, 3);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-08', 4, 4);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-09', 5, 5);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-10', 6, 6);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-11', 7, 7);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-12', 8, 8);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-13', 9, 9);
+INSERT INTO IssueRecord (IssueDate, BookISBN, CustomerID) VALUES ('2024-08-14', 10, 10);
 
--- Inserting Values into RETURNCARD Table
-INSERT INTO RETURNCARD VALUES (6801, '2017-11-15', 101, 'IT', 1230);
-INSERT INTO RETURNCARD VALUES (6802, '2017-12-15', 102, 'HARRY POTTER', 1231);
-INSERT INTO RETURNCARD VALUES (6803, '2018-01-15', 103, 'MISERY', 1232);
-INSERT INTO RETURNCARD VALUES (6804, '2018-02-15', 104, 'THE SHINING', 1233);
-INSERT INTO RETURNCARD VALUES (6805, '2018-03-15', 105, 'SHERLOCK HOLMES', 1234);
-INSERT INTO RETURNCARD VALUES (6806, '2018-04-15', 106, 'WAR AND PEACE', 1235);
-INSERT INTO RETURNCARD VALUES (6807, '2018-05-15', 107, 'ROMEO AND JULIET', 1236);
-INSERT INTO RETURNCARD VALUES (6808, '2018-06-15', 108, 'THE GOOD BOATMAN', 1237);
-INSERT INTO RETURNCARD VALUES (6809, '2018-07-15', 109, 'TINTIN', 1238);
-INSERT INTO RETURNCARD VALUES (6810, '2018-08-15', 110, 'THE LORD OF THE RINGS', 1239);
+-- Insert Data into ReturnRecord Table
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-20', 1, 1);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-21', 2, 2);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-22', 3, 3);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-23', 4, 4);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-24', 5, 5);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-25', 6, 6);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-26', 7, 7);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-27', 8, 8);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-28', 9, 9);
+INSERT INTO ReturnRecord (ReturnDate, BookISBN, CustomerID) VALUES ('2024-08-29', 10, 10);
